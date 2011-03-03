@@ -10,6 +10,7 @@ Source0:	%{name}-%{version}.tar.xz
 # Source0-md5:	2046d9a568d0a2b989f9d218ff04ad78
 Patch0:		%{name}-uvcvideo_h.patch
 Patch1:		%{name}-pkgconfig.patch
+Patch2:		%{name}-undebian.patch
 URL:		http://www.quickcamteam.net/software/libwebcam/
 BuildRequires:	cmake >= 2.6.0
 BuildRequires:	libxml2-devel
@@ -55,6 +56,7 @@ controls to uvc devices.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p0
 
 %build
 install -d build
