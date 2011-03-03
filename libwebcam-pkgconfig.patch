@@ -1,0 +1,53 @@
+Index: libwebcam-0.2.1/libwebcam/CMakeLists.txt
+===================================================================
+--- libwebcam-0.2.1/libwebcam/CMakeLists.txt	(revision 97)
++++ libwebcam-0.2.1/libwebcam/CMakeLists.txt	(working copy)
+@@ -107,8 +107,21 @@
+ 	COMPILE_FLAGS "-Wall ${EXTRA_COMPILE_FLAGS}"
+ )
+ 
++# create libwebcam.pc (for pkg-config)
++execute_process (
++	COMMAND			sh -c "sed -e 's_<--PREFIX--!>_${CMAKE_INSTALL_PREFIX}_g' ${CMAKE_CURRENT_SOURCE_DIR}/pkgconfig/libwebcam.pc_base  > ${CMAKE_CURRENT_SOURCE_DIR}/pkgconfig/libwebcam.pc"
++	RESULT_VARIABLE		PC_EXECUTE_RESULT
++	ERROR_QUIET
++)
+ 
++if (PC_EXECUTE_RESULT)
++	message(ERROR " Unable to parse ${CMAKE_CURRENT_SOURCE_DIR}/pkgconfig/libwebcam.pc_base")
++else (PC_EXECUTE_RESULT)
++	message("** created libwecam.pc")
++endif (PC_EXECUTE_RESULT)
+ 
++
++
+ #
+ # INSTALLATION
+ #
+@@ -128,8 +141,13 @@
+ 	COMPONENT				LIBWEBCAM
+ )
+ 
++install (
++	FILES	pkgconfig/libwebcam.pc
++	DESTINATION 	${CMAKE_INSTALL_LIBDIR}/pkgconfig
++)
+ 
+ 
++
+ #
+ # PACKAGING
+ #
+--- libwebcam-0.2.1/libwebcam/pkgconfig/libwebcam.pc_base
++++ libwebcam-0.2.1/libwebcam/pkgconfig/libwebcam.pc_base
+@@ -0,0 +1,10 @@
++prefix=<--PREFIX--!>
++exec_prefix=${prefix}
++libdir=${exec_prefix}/lib
++includedir=${exec_prefix}/include
++ 
++Name: libwebcam
++Description: The Webcam Library
++Version: 0.2.1
++Libs: -L${libdir} -lwebcam 
++Cflags: -I${includedir}
