@@ -38,17 +38,17 @@ Header files for the Webcam Library library.
 #%description devel -l pl.UTF-8
 #Pliki nagłówkowe biblioteki FOO.
 
-%package -n uvcdyncrtl
+%package -n uvcdynctrl
 Summary:	Command line tool to control v4l2 devices
 #Summary(pl.UTF-8):	Dokumentacja API biblioteki FOO
 License:	GPL
 Group:		Applications/Multimedia
 
-%description -n uvcdyncrtl
+%description -n uvcdynctrl
 This package provides the tools needed to add vendor specific
 controls to uvc devices.
 
-#%description -n uvcdyncrtl -l pl.UTF-8
+#%description -n uvcdynctrl -l pl.UTF-8
 #Dokumentacja API biblioteki FOO.
 
 %prep
@@ -90,7 +90,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/libwebcam
 %{_pkgconfigdir}/libwebcam.pc
 
-%files -n uvcdyncrtl
+%files -n uvcdynctrl
 %defattr(644,root,root,755)
 %doc uvcdynctrl/README
 %attr(755,root,root) %{_bindir}/*
