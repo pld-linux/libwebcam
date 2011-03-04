@@ -14,6 +14,9 @@ Patch2:		%{name}-undebian.patch
 URL:		http://www.quickcamteam.net/software/libwebcam/
 BuildRequires:	cmake >= 2.6.0
 BuildRequires:	libxml2-devel
+BuildRequires:	rpmbuild(macros) >= 1.600
+BuildRequires:	tar >= 1:1.22
+BuildRequires:	xz
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
