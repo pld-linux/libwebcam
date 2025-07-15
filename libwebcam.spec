@@ -2,7 +2,7 @@ Summary:	The Webcam Library
 #Summary(pl.UTF-8):	-
 Name:		libwebcam
 Version:	0.2.1
-Release:	2
+Release:	3
 License:	LGPL
 Group:		Libraries
 # svn co http://svn.quickcamteam.net/svn/qct/webcam-tools/trunk/
