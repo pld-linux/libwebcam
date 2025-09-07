@@ -1,5 +1,5 @@
 Summary:	The Webcam Library
-#Summary(pl.UTF-8):	-
+Summary(pl.UTF-8):	Biblioteka Webcam
 Name:		libwebcam
 Version:	0.2.1
 Release:	3
@@ -28,32 +28,40 @@ space library was always supposed to be: an easy to use library
 that shields its users from many of the difficulties and problems
 of using the V4L2 API directly.
 
-#%description -l pl.UTF-8
+%description -l pl.UTF-8
+Biblioteka Webcam została zaprojektowana w celu uproszczenia
+tworzenia aplikacji wykorzystujących kamery internetowe, głównie pod
+Linuksem, ale z możliwością portowania na inne platformy, w
+szczególności Solaris. Spełnia część zadań, które powinna realizować
+nienapisana biblioteka przestrzeni użytkownika Video4Linux: łatwej w
+użyciu biblioteki oddzielającej wiele trudności i problemów przy
+korzystaniu bezpośrednio z interfejsu API V4L2.
 
 %package devel
-Summary:	Header files for the Webcam Library
-#Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki FOO
+Summary:	Header files for the Webcam library
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki Webcam
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description devel
-Header files for the Webcam Library library.
+Header files for the Webcam library.
 
-#%description devel -l pl.UTF-8
-#Pliki nagłówkowe biblioteki FOO.
+%description devel -l pl.UTF-8
+Pliki nagłówkowe biblioteki Webcam.
 
 %package -n uvcdynctrl
-Summary:	Command line tool to control v4l2 devices
-#Summary(pl.UTF-8):	Dokumentacja API biblioteki FOO
+Summary:	Command line tool to control V4L2 devices
+Summary(pl.UTF-8):	Narzędzie linii poleceń do sterowania urządzeniami V4L2
 License:	GPL
 Group:		Applications/Multimedia
 
 %description -n uvcdynctrl
-This package provides the tools needed to add vendor specific
-controls to uvc devices.
+This package provides the tools needed to add vendor specific controls
+to UVC devices.
 
-#%description -n uvcdynctrl -l pl.UTF-8
-#Dokumentacja API biblioteki FOO.
+%description -n uvcdynctrl -l pl.UTF-8
+Ten pakiet dostarcza narzędzie potrzebne do dodania do urządzeń UVC
+sterowania urządzeń zależnego od producenta.
 
 %prep
 %setup -q
