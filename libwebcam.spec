@@ -1,20 +1,22 @@
 Summary:	The Webcam Library
 Summary(pl.UTF-8):	Biblioteka Webcam
 Name:		libwebcam
-Version:	0.2.1
-Release:	3
-License:	LGPL
+Version:	0.2.5
+Release:	1
+License:	LGPL v3+ (libwebcam), GPL v3+ (uvcdynctrl)
 Group:		Libraries
-# svn co http://svn.quickcamteam.net/svn/qct/webcam-tools/trunk/
-Source0:	%{name}-%{version}.tar.xz
-# Source0-md5:	2046d9a568d0a2b989f9d218ff04ad78
-Patch0:		%{name}-uvcvideo_h.patch
+Source0:	https://downloads.sourceforge.net/libwebcam/%{name}-src-%{version}.tar.gz
+# Source0-md5:	454123bbcc2497fb74a7542b48dd96b4
 Patch1:		%{name}-pkgconfig.patch
-Patch2:		%{name}-undebian.patch
-URL:		http://www.quickcamteam.net/software/libwebcam/
+URL:		https://sourceforge.net/projects/libwebcam/
 BuildRequires:	cmake >= 2.6.0
-BuildRequires:	libxml2-devel
-BuildRequires:	rpmbuild(macros) >= 1.600
+# for vcs checkouts (uvcdynctrl/cmdline.* generation)
+#BuildRequires:	gengetopt
+# <linux/uvcvideo.h> uapi header
+BuildRequires:	linux-libc-headers >= 7:3.7
+BuildRequires:	libxml2-devel >= 2.0
+BuildRequires:	pkgconfig
+BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -40,6 +42,7 @@ korzystaniu bezpośrednio z interfejsu API V4L2.
 %package devel
 Summary:	Header files for the Webcam library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki Webcam
+License:	LGPL v3+
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
@@ -49,11 +52,25 @@ Header files for the Webcam library.
 %description devel -l pl.UTF-8
 Pliki nagłówkowe biblioteki Webcam.
 
+%package static
+Summary:	Static Webcam library
+Summary(pl.UTF-8):	Statyczna biblioteka Webcam
+License:	LGPL v3+
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description static
+Static Webcam library.
+
+%description static -l pl.UTF-8
+Statyczna biblioteka Webcam.
+
 %package -n uvcdynctrl
 Summary:	Command line tool to control V4L2 devices
 Summary(pl.UTF-8):	Narzędzie linii poleceń do sterowania urządzeniami V4L2
-License:	GPL
+License:	GPL v3+
 Group:		Applications/Multimedia
+Requires:	%{name} = %{version}-%{release}
 
 %description -n uvcdynctrl
 This package provides the tools needed to add vendor specific controls
@@ -65,26 +82,26 @@ sterowania urządzeń zależnego od producenta.
 
 %prep
 %setup -q
-%patch -P0 -p1
 %patch -P1 -p1
-%patch -P2 -p0
+
+# junk in dist tarball
+%{__rm} common/build/cmake_try_v4l2_ctrl_type_string.c~
+%{__rm} uvcdynctrl/data/046d/logitech.xml~
 
 %build
 install -d build
 cd build
-%cmake \
-	-DCMAKE_INCLUDE_PATH=../common/include \
-	../
+%cmake .. \
+	-DCMAKE_INSTALL_INCLUDEDIR=include \
+	-DCMAKE_INSTALL_LIBDIR=%{_lib}
+
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_includedir}/libwebcam
 
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
-
-cp -a common/include/*.h $RPM_BUILD_ROOT%{_includedir}/libwebcam
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -94,20 +111,26 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc libwebcam/README
+%doc README.md libwebcam/README
 %attr(755,root,root) %{_libdir}/libwebcam.so.*.*.*
+%ghost %{_libdir}/libwebcam.so.0
 
 %files devel
 %defattr(644,root,root,755)
 %{_libdir}/libwebcam.so
-%{_includedir}/libwebcam
+%{_includedir}/dynctrl-logitech.h
+%{_includedir}/webcam.h
 %{_pkgconfigdir}/libwebcam.pc
+
+%files static
+%defattr(644,root,root,755)
+%{_libdir}/libwebcam.a
 
 %files -n uvcdynctrl
 %defattr(644,root,root,755)
 %doc uvcdynctrl/README
-%attr(755,root,root) %{_bindir}/*
-#%{_sysconfdir}/udev/data/046d/logitech.xml
-%{_sysconfdir}/udev/data
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/udev/rules.d/80-uvcdynctrl.rules
+%attr(755,root,root) %{_bindir}/uvcdynctrl*
 %attr(755,root,root) /lib/udev/uvcdynctrl
+/lib/udev/rules.d/80-uvcdynctrl.rules
+%{_datadir}/uvcdynctrl
+%{_mandir}/man1/uvcdynctrl*.1*
